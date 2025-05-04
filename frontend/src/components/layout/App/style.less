@@ -1,0 +1,332 @@
+@import "../../../static/fonts/Poppins/Poppins.css";
+
+:root {
+  --headerHeight: 50px;
+  --footerHeight: 50px;
+
+  // Переменные для темы
+  --pageBg: #f8f9fa;
+  --headerBg: #ffffff;
+  --footerBg: #ffffff;
+
+  --elDefaultBg: #ffffff;
+  --elDefaultBgHover: #f1f3f5;
+  --elDefaultBorderColor: #dee2e6;
+  --elDefaultBgSelected: #e9ecef;
+  --elDefaultLoading: #dee2e666;
+
+  --elSecondaryBg: #e9ecef;
+  --elSecondaryBgHover: #f8f9fa;
+  --elSecondaryBorderColor: #ced4da;
+  --elSecondaryBgSelected: #d1d5db;
+  --elSecondaryLoading: #ced4da33;
+
+  --elTextColorDefault: #00000066;
+
+  --cardBg: #ffffff;
+  --cardBorderColor: #e9ecef;
+  --cardBgHover: #f1f3f5;
+
+  --textPrimary: #212529;
+  --textSecondary: #ffffff;
+
+  --modalBg: #ffffff;
+  --modalBgBorderColor: #ced4da;
+}
+
+[data-theme="dark"] {
+  --pageBg: #121212;
+  --headerBg: #1e1e1e;
+  --footerBg: #1e1e1e;
+
+  --elDefaultBg: #2c2c2c;
+  --elDefaultBgHover: #383838;
+  --elDefaultBorderColor: #444444;
+  --elDefaultBgSelected: #444444;
+
+  --elSecondaryBg: #383838;
+  --elSecondaryBgHover: #444444;
+  --elSecondaryBorderColor: #555555;
+  --elSecondaryBgSelected: #555555;
+
+  --elTextColorDefault: #b0b0b0;
+  --textPrimary: #e0e0e0;
+  --textSecondary: #121212;
+
+  --cardBg: #1e1e1e;
+  --cardBorderColor: #383838;
+  --cardBgHover: #2c2c2c;
+
+  --modalBg: #252525;
+  --modalBgBorderColor: #444444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+
+  overflow-x: hidden;
+  color: var(--textPrimary);
+  background-color: var(--pageBg);
+}
+
+a {
+  color: var(--textPrimary);
+  text-decoration: none;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 93px;
+  max-height: 142px;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  resize: none;
+  margin-bottom: 16px;
+  color: var(--textPrimary);
+  border: 1px solid var(--elDefaultBorderColor);
+  background-color: var(--elDefaultBg);
+
+  transition: background-color 0.2s;
+
+  &::placeholder {
+    color: var(--elTextColorDefault);
+  }
+
+  &:hover {
+    background-color: var(--elDefaultBgHover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    outline-offset: 0;
+    background-color: var(--elDefaultBgHover);
+  }
+}
+
+.loading {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+  line-height: 30px;
+  font-weight: 500;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding-left: 19px;
+  > li {
+    position: relative;
+
+    &:not(:last-child) {
+      margin-bottom: 2px;
+    }
+  }
+}
+
+.line {
+  display: flex;
+  position: relative;
+  width: 100%;
+  flex-wrap: wrap;
+
+  &:not(:last-child) {
+    margin-bottom: 12px;
+  }
+
+  &.mini:not(:last-child) {
+    margin-bottom: 4px;
+  }
+
+  &.tiny:not(:last-child) {
+    margin-bottom: 8px;
+  }
+
+  &.small:not(:last-child) {
+    margin-bottom: 12px;
+  }
+
+  &.semi-medium:not(:last-child) {
+    margin-bottom: 16px;
+  }
+
+  &.medium:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  &.upper-middle:not(:last-child) {
+    margin-bottom: 24px;
+  }
+
+  &.big {
+    margin-bottom: 30px;
+  }
+
+  &.bigger:not(:last-child) {
+    margin-bottom: 40px;
+  }
+
+  &.great:not(:last-child) {
+    margin-bottom: 50px;
+  }
+}
+
+.flex {
+  &,
+  &_nowrap,
+  &_column,
+  &_align_center,
+  &_align_start,
+  &_align_end,
+  &_justify_start,
+  &_justify_center,
+  &_justify_end,
+  &_justify_around,
+  &_justify_between {
+    display: flex;
+  }
+
+  &_nowrap {
+    flex-wrap: nowrap;
+  }
+
+  &_column {
+    flex-direction: column;
+  }
+
+  &_align {
+    &_center {
+      align-items: center;
+    }
+    &_start {
+      align-items: flex-start;
+    }
+    &_end {
+      align-items: flex-end;
+    }
+  }
+
+  &_justify {
+    &_start {
+      justify-content: flex-start;
+    }
+    &_center {
+      justify-content: center;
+    }
+    &_end {
+      justify-content: flex-end;
+    }
+    &_around {
+      justify-content: space-around;
+    }
+    &_between {
+      justify-content: space-between;
+    }
+  }
+}
+
+.text {
+  &_lowercase {
+    text-transform: lowercase;
+    &_firstLetter:first-letter {
+      text-transform: lowercase;
+    }
+  }
+  &_uppercase {
+    text-transform: uppercase;
+    &_firstLetter:first-letter {
+      text-transform: uppercase;
+    }
+  }
+  &_underline {
+    text-decoration: underline;
+  }
+
+  &_underlineIndent {
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      background-color: #000;
+      width: 100%;
+      height: 2px;
+    }
+  }
+
+  &_italic {
+    font-style: italic;
+  }
+
+  &_opensans {
+    font-family: "Open Sans", sans-serif;
+  }
+
+  &_regular {
+    font-weight: 400;
+  }
+  &_medium {
+    font-weight: 500;
+  }
+  &_semiBold {
+    font-weight: 600;
+  }
+  &_bold {
+    font-weight: 700;
+  }
+
+  &_font-10 {
+    font-size: 10px;
+    line-height: 14px;
+  }
+  &_font-12 {
+    font-size: 12px;
+    line-height: 16px;
+  }
+  &_font-13 {
+    font-size: 13px;
+    line-height: 16px;
+  }
+  &_font-14 {
+    font-size: 14px;
+    line-height: 17px;
+  }
+  &_font-16 {
+    font-size: 16px;
+    line-height: 19px;
+  }
+  &_font-18 {
+    font-size: 18px;
+    line-height: 21px;
+  }
+  &_font-20 {
+    font-size: 20px;
+    line-height: 23px;
+  }
+  &_font-22 {
+    font-size: 22px;
+    line-height: 35px;
+  }
+  &_font-24 {
+    font-size: 24px;
+    line-height: 37px;
+  }
+  &_font-26 {
+    font-size: 26px;
+    line-height: 39px;
+  }
+}

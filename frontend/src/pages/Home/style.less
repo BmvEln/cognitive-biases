@@ -1,0 +1,38 @@
+.Home {
+  &Subtitle {
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: 600;
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+
+  &Content {
+    &:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
+
+  &Biases {
+    display: flex;
+    column-gap: 24px;
+
+    > div:first-child {
+      width: 200px;
+      height: 200px;
+      background-size: cover;
+    }
+
+    > ul > li {
+      opacity: 0.8;
+      cursor: pointer;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}

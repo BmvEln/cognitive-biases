@@ -1,0 +1,45 @@
+.Practice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &Choices {
+    &:not(:last-child) {
+      margin-bottom: 50px;
+    }
+
+    > li {
+      color: #000000b3;
+      transition: color 0.2s;
+      &::marker {
+        font-weight: 600;
+      }
+
+      &:hover {
+        color: #000000;
+      }
+    }
+
+    &:has(.active) {
+      > li {
+        &:hover:not(.active) {
+          color: #000000b3;
+        }
+      }
+    }
+  }
+
+  &Choice {
+    &.active {
+      color: #000000;
+    }
+  }
+
+  &Step {
+    transition: opacity 0.5s;
+
+    &:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
+}

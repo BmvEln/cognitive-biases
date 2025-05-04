@@ -1,0 +1,123 @@
+button {
+  // Обнуляющие стили
+  margin: unset;
+  outline: unset;
+  // ___
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 400;
+
+  color: var(--textPrimary);
+
+  box-sizing: border-box;
+  border-radius: 16px;
+
+  border: 1px solid var(--elDefaultBorderColor);
+  background-color: var(--elDefaultBg);
+  padding: 0 16px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    opacity 0.2s;
+  user-select: none;
+  overflow: hidden;
+
+  &:hover:not(.noHover) {
+    background-color: var(--elDefaultBgHover);
+  }
+
+  // Размеры
+  &.md {
+    height: 28px;
+  }
+
+  &.big {
+    height: 32px;
+  }
+
+  // Классы
+
+  &.icon {
+    padding: 0;
+    width: 32px;
+    height: 32px;
+  }
+
+  &.animLoading {
+    position: relative;
+    &:before {
+      position: absolute;
+      content: "";
+      width: 8px;
+      height: 100%;
+      background-color: var(--elDefaultLoading);
+      transform: skew(-25deg, 0);
+
+      animation-name: loading;
+      animation-timing-function: linear;
+      animation-duration: 0.7s;
+      animation-iteration-count: infinite;
+    }
+  }
+
+  // Состояния
+
+  &.selected {
+    background-color: var(--elDefaultBgSelected);
+  }
+
+  &.disabled {
+    cursor: default;
+    background-color: var(--elDefaultBgHover);
+  }
+
+  // Темы
+
+  &.secondary {
+    border: 1px solid var(--elSecondaryBorderColor);
+    background-color: var(--elSecondaryBg);
+    &:hover:not(.noHover) {
+      background-color: var(--elSecondaryBgHover);
+    }
+
+    &.selected {
+      background-color: var(--elSecondaryBgSelected);
+    }
+  }
+
+  &.pink {
+    background-color: #f7786b;
+    color: #000;
+    &:hover {
+      background-color: #e66a5f;
+    }
+
+    &.animLoading:before {
+      background-color: #ffffff33;
+    }
+  }
+
+  &.green {
+    background-color: #d1ff97;
+    color: #000;
+    &:hover {
+      background-color: #c2e68a;
+    }
+  }
+}
+
+@keyframes loading {
+  to {
+    right: -20%;
+  }
+
+  from {
+    right: 100%;
+  }
+}

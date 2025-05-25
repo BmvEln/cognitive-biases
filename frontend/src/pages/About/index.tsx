@@ -49,7 +49,7 @@ function About() {
       <div className="AboutTeam">
         {TEAM.map(({ name, img, rank }, i) => (
           <div key={i}>
-            <img src={img} alt="" />
+            <img src={img} alt="" style={{ borderRadius: "50%" }} />
             <div>{name}</div>
             <div>{rank}</div>
           </div>

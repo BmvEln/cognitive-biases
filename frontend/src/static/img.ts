@@ -11,6 +11,7 @@ import lock from "./svg/lock.svg";
 import avatar1 from "./webp/avatar1.webp";
 import avatar2 from "./webp/avatar2.webp";
 import avatar3 from "./webp/avatar3.webp";
+import bias1 from "./webp/bias1.webp";
 
 export const IMG = {
   seeMore,
@@ -26,4 +27,5 @@ export const IMG = {
   avatar1,
   avatar2,
   avatar3,
+  bias1,
 };

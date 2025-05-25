@@ -12,8 +12,6 @@ import Page from "../../components/layout/Page";
 import Button from "../../components/controls/Button";
 import { Radio } from "../../components/controls/Radio";
 
-const WIDTH_CONTENT = "1200px";
-
 function getLsKeyName(id: string) {
   return `choice${id}`;
 }
@@ -123,7 +121,8 @@ function Step({
       className="PracticeStep"
       style={{
         pointerEvents: isStepAccess ? "none" : "auto",
-        opacity: isStepAccess ? 0 : 1,
+        // opacity: isStepAccess ? 0 : 1,
+        display: isStepAccess ? "none" : "block",
       }}
     >
       <div
@@ -138,7 +137,7 @@ function Step({
       </div>
 
       {!situation ? null : (
-        <div className="line tiny flex_column text_font-16">
+        <div className="line flex_column text_font-16">
           <span>
             <span className="text_medium">Ситуация:</span>
             <span>&nbsp;{situation}</span>
@@ -202,6 +201,7 @@ type Briefing = {
   goal: string;
   lsKeyName: string;
   setVariantsIdxs: (v: []) => void;
+  id: string | undefined;
 };
 
 function Briefing({
@@ -210,6 +210,7 @@ function Briefing({
   goal,
   lsKeyName,
   setVariantsIdxs,
+  id,
 }: Briefing) {
   return (
     <>
@@ -254,6 +255,26 @@ function Briefing({
         <div>{script}</div>
       </div>
 
+      {id !== "1" ? null : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "50px",
+          }}
+        >
+          <div
+            style={{
+              width: "768px",
+              height: "512px",
+              backgroundImage: `url(${IMG.bias1})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }}
+          ></div>
+        </div>
+      )}
+
       <div className="line upper-middle flex_column">
         <div className="PracticeSubTitle">Цель:</div>
         <div>{goal}</div>
@@ -280,7 +301,7 @@ function Result({
   fbWrongChoices,
 }: ResultProps) {
   return (
-    <div style={{ width: WIDTH_CONTENT }}>
+    <div>
       <div style={{ margin: "30px 0 24px" }}>{positiveResult}</div>
 
       <div className="PracticeFeedback PracticeFeedback_positive">
@@ -369,8 +390,6 @@ function Practice() {
     lsKeyName = getLsKeyName(id as string),
     simulation = DATA[id]?.simulation,
     rightAnswers = simulation?.rightAnswers,
-    fbRightChoices = simulation?.feedbackRightChoices,
-    fbWrongChoices = simulation?.feedbackWrongChoices,
     lsChoice = ls.get(lsKeyName) || [],
     [variantsIdxs, setVariantsIdxs] = useState(lsChoice),
     [activeAnalysis, setActiveAnalysis] = useState(false),
@@ -423,8 +442,9 @@ function Practice() {
 
   return (
     <Page className="Practice">
-      <div style={{ width: WIDTH_CONTENT }}>
+      <div>
         <Briefing
+          id={id}
           name={simulation.name}
           script={simulation.script}
           goal={simulation.goal}
@@ -440,7 +460,7 @@ function Practice() {
           setVariantsIdxs={setVariantsIdxs}
           handleClickChoice={handleClickChoice}
           rightAnswers={rightAnswers}
-          fbWrongChoices={fbWrongChoices}
+          fbWrongChoices={simulation?.feedbackWrongChoices}
           lsChoice={lsChoice}
         />
       </div>
@@ -451,8 +471,8 @@ function Practice() {
           positiveResult={simulation.positiveResult}
           activeAnalysis={activeAnalysis}
           setActiveAnalysis={setActiveAnalysis}
-          fbRightChoices={fbRightChoices}
-          fbWrongChoices={fbWrongChoices}
+          fbRightChoices={simulation?.feedbackRightChoices}
+          fbWrongChoices={simulation?.feedbackWrongChoices}
         />
       )}
     </Page>

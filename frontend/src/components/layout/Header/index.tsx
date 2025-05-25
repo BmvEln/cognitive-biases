@@ -12,8 +12,6 @@ import {
   PROJECT_NAME,
 } from "../../../static/static.tsx";
 
-import Theme from "../../controls/Theme";
-
 function Header() {
   const { email } = useAppSelector((state: RootState) => state.user);
 
@@ -25,7 +23,6 @@ function Header() {
         </div>
 
         <div className="HeaderLinks">
-          <Theme />
           <Link to={LINK_HOME}>Главная</Link>
           <Link to={LINK_ABOUT}>О нас</Link>
           {email ? (

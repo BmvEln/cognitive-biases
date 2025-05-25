@@ -1,4 +1,5 @@
 import "./style.less";
+
 import Page from "../../components/layout/Page";
 
 function NoteFound() {

@@ -6,12 +6,10 @@ import "./style.less";
 
 import { DATA } from "../fakeData.ts";
 import { ls } from "../../functions/functions.tsx";
+import { IMG } from "../../static/img.ts";
 
 import Page from "../../components/layout/Page";
 import Button from "../../components/controls/Button";
-import Heading from "../../components/blocks/Heading";
-import login from "../Login";
-import { IMG } from "../../static/img.ts";
 import { Radio } from "../../components/controls/Radio";
 
 const WIDTH_CONTENT = "1200px";
@@ -34,7 +32,7 @@ type StepsProps = {
   fbWrongChoices: { [number: string]: string }[];
   setVariantsIdxs: (v: number[]) => void;
   lsChoice: number[];
-  id: string;
+  id: string | undefined;
 };
 
 function Steps({
@@ -129,7 +127,7 @@ function Step({
       }}
     >
       <div
-        className={classnames("line tiny text_font-16", {
+        className={classnames("line semi-medium text_font-16", {
           "semi-medium": situation,
         })}
       >
@@ -202,8 +200,8 @@ type Briefing = {
   name: string;
   script: string;
   goal: string;
-  numberSteps: number;
-  bias: string;
+  lsKeyName: string;
+  setVariantsIdxs: (v: []) => void;
 };
 
 function Briefing({
@@ -227,7 +225,6 @@ function Briefing({
             onClick={() => {
               const choicesCompleted = ls.get("choicesCompleted") || [];
 
-              console.log(lsKeyName);
               ls.remove(lsKeyName);
               setVariantsIdxs([]);
 
@@ -345,13 +342,8 @@ function Result({
 
             <div>
               {Object.values(fbWrongChoices).map((obj, i) => (
-                <div key={i} className="line flex_column">
-                  <div
-                    style={{ marginBottom: "6px" }}
-                    className="text_semiBold"
-                  >
-                    Шаг {i + 1}
-                  </div>
+                <div style={{ marginBottom: "12px" }} key={i}>
+                  <div className="line text_semiBold">Шаг {i + 1}</div>
 
                   <ul>
                     {Object.values(obj).map((text, j) => (
@@ -369,7 +361,6 @@ function Result({
 }
 
 // ключ - количество пройденных
-// в профиле достижения
 // придумать что-то, чтобы много раз не приходилось к индексу прибавлять 1
 
 function Practice() {

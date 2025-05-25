@@ -1,4 +1,6 @@
-export const DATA = {
+import { dataPT } from "../static/types.tsx";
+
+export const DATA: dataPT = {
   1: {
     name: "Эффект Даннинга-Крюгера",
     definition:

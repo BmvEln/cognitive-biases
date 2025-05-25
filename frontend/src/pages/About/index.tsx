@@ -1,10 +1,9 @@
-import React from "react";
-
 import "./style.less";
+
+import { IMG } from "../../static/img.ts";
 
 import Heading from "../../components/blocks/Heading";
 import Page from "../../components/layout/Page";
-import { IMG } from "../../static/img.ts";
 
 const TEAM = [
   {

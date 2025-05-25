@@ -164,25 +164,10 @@ function MapBiases({ setBiasId }: MapBiasesProps) {
 
 function Home() {
   const [biasId, setBiasId] = useState<string | undefined>(undefined),
-    item = {
-      name: null,
-      definition: null,
-      realLifeExample: null,
-      manifestation: null,
-      fix: null,
-    };
-
-  if (DATA[biasId]) {
-    item.name = DATA[biasId].name;
-    item.definition = DATA[biasId].definition;
-    item.realLifeExample = DATA[biasId].realLifeExample;
-    item.manifestation = DATA[biasId].manifestation;
-    item.fix = DATA[biasId].fix;
-  }
-
-  const handleClickClose = useCallback(() => {
-    setBiasId(undefined);
-  }, []);
+    biasItem = typeof biasId === "string" ? DATA[biasId] : undefined,
+    handleClickClose = useCallback(() => {
+      setBiasId(undefined);
+    }, []);
 
   return (
     <Page className="Home">
@@ -196,7 +181,11 @@ function Home() {
       >
         {!biasId
           ? null
-          : Object.values(item).map((v, i) => {
+          : Object.values(biasItem).map((v, i) => {
+              if (typeof v === "object" && !Array.isArray(v) && v !== null) {
+                return;
+              }
+
               return (
                 <React.Fragment key={i}>
                   <div className="HomeSubtitle">{SUBTITLES[i]}</div>

@@ -1,9 +1,11 @@
+import { DATA } from "../pages/fakeData.ts";
+
 export const ACHIEVEMENTS = {
   beginner: {
     id: 1,
     name: "Новичок критического мышления",
     desc: "Пройти 1 когнитивное искажение",
-    condition: (userData) => userData.choicesCompleted?.length === 1,
+    condition: (userData) => userData.choicesCompleted?.length > 0,
     progress: (userData) =>
       Math.min((userData.choicesCompleted?.length / 1) * 100, 100),
   },
@@ -11,7 +13,7 @@ export const ACHIEVEMENTS = {
     id: 2,
     name: "Разрушитель иллюзий",
     desc: "Пройти 3 когнитивных искажения",
-    condition: (userData) => userData.choicesCompleted?.length === 3,
+    condition: (userData) => userData.choicesCompleted?.length >= 3,
     progress: (userData) =>
       Math.min((userData.choicesCompleted?.length / 3) * 100, 100),
   },
@@ -20,11 +22,10 @@ export const ACHIEVEMENTS = {
     name: "Мастер когнитивных искажений",
     desc: "Пройти все искажения",
     condition: (userData) =>
-      userData.choicesCompleted?.length === Object.keys(ACHIEVEMENTS).length,
+      userData.choicesCompleted?.length === Object.keys(DATA).length,
     progress: (userData) =>
       Math.min(
-        (userData.choicesCompleted?.length / Object.keys(ACHIEVEMENTS).length) *
-          100,
+        (userData.choicesCompleted?.length / Object.keys(DATA).length) * 100,
         100,
       ),
   },

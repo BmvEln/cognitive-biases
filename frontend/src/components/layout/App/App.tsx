@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 
 import "./style.less";
-import "../../../firebase/firebase.ts";
 
 import {
   LINK_ABOUT,
@@ -13,12 +12,10 @@ import {
   LINK_PROFILE,
   LINK_SING_IN,
   LINK_SING_UP,
-  LINK_TASK,
 } from "../../../static/static.tsx";
 import { auth } from "../../../firebase/firebase.ts";
-
+import "../../../firebase/firebase.ts";
 import { setUser } from "../../../redux/slices/userSlice.tsx";
-import { useAchievements } from "../../../functions/hooks.tsx";
 
 import MainLayout from "../MainLayout";
 import Home from "../../../pages/Home";
@@ -31,8 +28,6 @@ import About from "../../../pages/About";
 
 function App() {
   const dispatch = useAppDispatch();
-
-  useAchievements();
 
   const [loading, setLoading] = useState(true);
 

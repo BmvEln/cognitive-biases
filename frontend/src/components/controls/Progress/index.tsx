@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import classNames from "classnames";
 
 import "./style.less";
@@ -11,10 +12,10 @@ const SIZES = {
 
 type ProgressProps = {
   className?: string;
-  style?: object;
+  style?: CSSProperties;
   value: number;
   width?: number;
-  size?: string;
+  size?: keyof typeof SIZES;
   color?: string;
 };
 
@@ -30,8 +31,8 @@ export default function Progress({
     <div
       className={classNames("Progress", className)}
       style={{
-        "--value": value * 100 + "%",
-        "--progressColor": color || DEFAULT_COLOR,
+        ...({ "--value": value * 100 + "%" } as CSSProperties),
+        ...({ "--progressColor": color || DEFAULT_COLOR } as CSSProperties),
         width: `${width}px`,
         height: SIZES[size as keyof typeof SIZES],
         ...style,

@@ -2,12 +2,12 @@
 
 :root {
   --headerHeight: 50px;
-  --footerHeight: 50px;
+  --footerHeight: 100px;
 
   // Переменные для темы
-  --pageBg: #f8f9fa;
+  --pageBg: #f1f2f4;
   --headerBg: #ffffff;
-  --footerBg: #ffffff;
+  --footerBg: #1f2937;
 
   --elDefaultBg: #ffffff;
   --elDefaultBgHover: #f1f3f5;
@@ -27,7 +27,7 @@
   --cardBorderColor: #e9ecef;
   --cardBgHover: #f1f3f5;
 
-  --textPrimary: #212529;
+  --textPrimary: #1f2937;
   --textSecondary: #ffffff;
 
   --modalBg: #ffffff;
@@ -71,12 +71,12 @@ body {
   font-family: "Poppins", sans-serif;
 
   overflow-x: hidden;
-  color: var(--textPrimary);
-  background-color: var(--pageBg);
+  color: #1f2937;
+  background-color: #f1f2f4;
 }
 
 a {
-  color: var(--textPrimary);
+  color: #1f2937;
   text-decoration: none;
 }
 
@@ -89,7 +89,7 @@ a {
   box-sizing: border-box;
   resize: none;
   margin-bottom: 16px;
-  color: var(--textPrimary);
+  color: #1f2937;
   border: 1px solid var(--elDefaultBorderColor);
   background-color: var(--elDefaultBg);
 
@@ -266,6 +266,10 @@ ol {
       width: 100%;
       height: 2px;
     }
+  }
+
+  &_center {
+    text-align: center;
   }
 
   &_italic {

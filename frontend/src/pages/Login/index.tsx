@@ -14,7 +14,7 @@ import { EmailAuthProvider, linkWithCredential } from "firebase/auth";
 import Page from "../../components/layout/Page";
 import Input from "../../components/controls/Input";
 import Button from "../../components/controls/Button";
-import { LINK_HISTORY, LINK_HOME } from "../../static/static.tsx";
+import { LINK_HOME } from "../../static/static.tsx";
 
 function Login({ method }: { method: string }) {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ function Login({ method }: { method: string }) {
           });
         } else {
           signInWithEmailAndPassword(auth, email, password).then(() => {
-            navigate(`${LINK_HISTORY}`);
+            navigate(`${LINK_HOME}`);
           });
         }
       } catch (err) {
@@ -59,7 +59,7 @@ function Login({ method }: { method: string }) {
           .then((usercred) => {
             const user = usercred.user;
             console.log("Анонимная учетная запись успешно обновлена", user);
-            navigate(`${LINK_HISTORY}`);
+            navigate(`${LINK_HOME}`);
           })
           .catch((error) => {
             console.warn(

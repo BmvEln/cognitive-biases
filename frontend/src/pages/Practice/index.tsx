@@ -5,11 +5,16 @@ import classnames from "classnames";
 import "./style.less";
 
 import { DATA } from "../fakeData.ts";
+import { ls } from "../../functions/functions.tsx";
 
 import Page from "../../components/layout/Page";
 import Button from "../../components/controls/Button";
+import Heading from "../../components/blocks/Heading";
+import login from "../Login";
+import { IMG } from "../../static/img.ts";
+import { Radio } from "../../components/controls/Radio";
 
-const WIDTH_CONTENT = "800px";
+const WIDTH_CONTENT = "1200px";
 
 function getLsKeyName(id: string) {
   return `choice${id}`;
@@ -44,9 +49,9 @@ function Steps({
   id,
 }: StepsProps) {
   const lsKeyName = getLsKeyName(id),
-    handleClick = useCallback(() => {
+    handleClickTryAgain = useCallback(() => {
       const newValue = [...lsChoice].slice(0, -1);
-      localStorage.setItem(lsKeyName, JSON.stringify(newValue));
+      ls.set(lsKeyName, newValue);
       setVariantsIdxs(newValue);
     }, [lsChoice, lsKeyName, setVariantsIdxs]);
 
@@ -68,17 +73,17 @@ function Steps({
         {Object.keys(fbWrongChoices[i]).includes(
           String(variantsIdxs[i] + 1),
         ) ? (
-          <div>
-            <div style={{ color: "red" }}>
-              Ты попал в сети когнитивного искажения.
-            </div>
-            <div>{fbWrongChoices[i][variantsIdxs[i] + 1]}</div>
-            <div className="line upper-middle">
-              Попробуй пройти еще раз учитывая полученный опыт.
+          <>
+            <div className="PracticeFeedback PracticeFeedback_negative">
+              <div>Ты попал в сети когнитивного искажения!</div>
+              <div className="line tiny">
+                {fbWrongChoices[i][variantsIdxs[i] + 1]}
+              </div>
+              <div>Попробуй пройти еще раз учитывая полученный опыт.</div>
             </div>
 
-            <Button onClick={handleClick}>Попробовать ещё раз</Button>
-          </div>
+            <Button onClick={handleClickTryAgain}>Попробовать ещё раз</Button>
+          </>
         ) : null}
       </React.Fragment>
     );
@@ -107,6 +112,10 @@ function Step({
   situation,
   question,
 }: StepProps) {
+  const [variantsIdx, setVariantsIdx] = useState<number | undefined>(
+    variantsIdxs[i],
+  );
+
   // !!0 (первый шаг) - false => 1
   // !!1 (второй шаг) - true && (4 (правильный ответ) !== 4 => false) => 1
   const isStepAccess = !!i && variantsIdxs[i - 1] + 1 !== rightAnswers[i - 1];
@@ -119,17 +128,21 @@ function Step({
         opacity: isStepAccess ? 0 : 1,
       }}
     >
-      <div className="line upper-middle">
+      <div
+        className={classnames("line tiny text_font-16", {
+          "semi-medium": situation,
+        })}
+      >
         <span>
-          <span className="text_semiBold">Шаг {i + 1}:</span>
+          <span className="text_medium">Шаг {i + 1}:</span>
           <span>&nbsp;{name}</span>
         </span>
       </div>
 
       {!situation ? null : (
-        <div style={{ margin: "20px 0 20px" }}>
+        <div className="line tiny flex_column text_font-16">
           <span>
-            <span className="text_semiBold">Ситуация:</span>
+            <span className="text_medium">Ситуация:</span>
             <span>&nbsp;{situation}</span>
           </span>
         </div>
@@ -141,23 +154,46 @@ function Step({
         </div>
       )}
 
-      <ol className="PracticeChoices">
-        {variants.map((variant: string, j: number) => (
-          <li
-            className={classnames("PracticeChoice", {
-              active: j === variantsIdxs[i],
-            })}
-            style={{
-              cursor:
-                typeof variantsIdxs[i] === "number" ? "default" : "pointer",
-            }}
-            key={j}
-            onClick={() => handleClickChoice(i, j)}
-          >
-            {variant}
-          </li>
-        ))}
-      </ol>
+      <div
+        style={{
+          width: "800px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            rowGap: "8px",
+          }}
+        >
+          {variants.map((variant: string, j: number) => (
+            <Radio
+              onClick={() => setVariantsIdx(j)}
+              selected={j === variantsIdx}
+              disabled={typeof variantsIdxs[i] === "number"}
+              text={variant}
+            />
+          ))}
+        </div>
+
+        {typeof variantsIdxs[i] === "number" ? null : (
+          <div className="flex flex_justify_end" style={{ marginTop: "20px" }}>
+            <Button
+              disabled={typeof variantsIdxs[i] === "number"}
+              onClick={() => {
+                if (
+                  typeof variantsIdx === "number" &&
+                  typeof variantsIdxs[i] !== "number"
+                ) {
+                  handleClickChoice(i, variantsIdx);
+                }
+              }}
+            >
+              Проверить
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -167,36 +203,63 @@ type Briefing = {
   script: string;
   goal: string;
   numberSteps: number;
+  bias: string;
 };
 
-function Briefing({ name, script, goal, numberSteps }: Briefing) {
+function Briefing({
+  name,
+  script,
+  goal,
+  lsKeyName,
+  setVariantsIdxs,
+}: Briefing) {
   return (
     <>
-      <div className="line upper-middle">
-        <span>
-          <span>
-            Тебе предложено пройти симуляцию 🎮 нацеленную помочь научиться
-            распознавать и понимать <br /> когнитивное искажение. Представленная
-            симуляция состоит из
-          </span>
-          <span className="text_semiBold"> {numberSteps} шагов. </span>
-          <span>Будь внимателен!</span>
-        </span>
+      <div className="PracticeTop">
+        <div>
+          <div>Симуляция:</div>
+          <div>&nbsp;{name}</div>
+        </div>
+
+        <div>
+          <Button
+            theme="gray"
+            onClick={() => {
+              const choicesCompleted = ls.get("choicesCompleted") || [];
+
+              console.log(lsKeyName);
+              ls.remove(lsKeyName);
+              setVariantsIdxs([]);
+
+              if (choicesCompleted.includes(lsKeyName)) {
+                if (choicesCompleted.length > 1) {
+                  ls.set(
+                    "choicesCompleted",
+                    [...choicesCompleted].filter((key) => key !== lsKeyName),
+                  );
+                } else {
+                  ls.remove("choicesCompleted");
+                }
+              }
+            }}
+          >
+            Сбросить все
+          </Button>
+
+          <Link to="/">
+            <Button>Вернуться</Button>
+          </Link>
+        </div>
       </div>
 
-      <div className="line upper-middle">
-        <div className="text_semiBold">Симуляция:</div>
-        <div>&nbsp;{name}</div>
+      <div className="line upper-middle flex_column">
+        <div className="PracticeSubTitle">Сценарий:</div>
+        <div>{script}</div>
       </div>
 
-      <div className="line">
-        <div className="text_semiBold">Сценарий:</div>
-        <div>&nbsp;{script}</div>
-      </div>
-
-      <div className="line upper-middle">
-        <div className="text_semiBold">Цель:</div>
-        <div>&nbsp;{goal}</div>
+      <div className="line upper-middle flex_column">
+        <div className="PracticeSubTitle">Цель:</div>
+        <div>{goal}</div>
       </div>
     </>
   );
@@ -221,68 +284,103 @@ function Result({
 }: ResultProps) {
   return (
     <div style={{ width: WIDTH_CONTENT }}>
-      <div style={{ margin: "24px 0 24px" }}>{positiveResult}</div>
+      <div style={{ margin: "30px 0 24px" }}>{positiveResult}</div>
 
-      <div style={{ margin: "50px 0 24px" }}>
+      <div className="PracticeFeedback PracticeFeedback_positive">
         <div style={{ color: "green" }}>Ты принял правильные решения!</div>
         <div>{conclusion}</div>
       </div>
 
       <Button onClick={() => setActiveAnalysis(!activeAnalysis)}>
+        <img
+          src={IMG.idea}
+          width={20}
+          height={20}
+          alt=""
+          style={{ marginRight: "4px" }}
+        />
         {activeAnalysis ? "Свернуть" : "Показать"} разбор
       </Button>
 
       {!activeAnalysis ? null : (
         <>
           <div
-            style={{ margin: "24px 0 24px" }}
+            style={{ margin: "24px 0 16px" }}
             className="text_font-20 text_semiBold"
           >
             Разбор:
           </div>
 
-          <div className="line tiny text_semiBold">Рациональные выборы:</div>
+          <div
+            style={{ border: "1px solid #0000000D", marginBottom: "24px" }}
+          />
 
-          <ul className="line upper-middle">
-            {Object.values(fbRightChoices).map((text, i) => (
-              <li key={i}>{text}</li>
-            ))}
-          </ul>
+          <div className="PracticeRationalChoices">
+            <div>Рациональные выборы:</div>
 
-          <div className="line tiny text_semiBold">
-            Ловушки и их последствия:
+            <div>
+              {Object.values(fbRightChoices).map((text, i) => (
+                <div key={i}>
+                  <svg
+                    width="20px"
+                    height="20px"
+                    viewBox="0 0 1024 1024"
+                    className="icon"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z"
+                      fill="#0283C5FF"
+                    />
+                  </svg>
+                  <div>{text}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <ul>
-            {Object.values(fbWrongChoices).map((obj, i) => (
-              <div className="line">
-                <div style={{ marginBottom: "6px" }} className="text_semiBold">
-                  Шаг {i + 1}
-                </div>
+          <div className="PracticeMistakeChoices">
+            <div>Ловушки и их последствия:</div>
 
-                {Object.values(obj).map((text, j) => (
-                  <li key={j}>{text}</li>
-                ))}
-              </div>
-            ))}
-          </ul>
+            <div>
+              {Object.values(fbWrongChoices).map((obj, i) => (
+                <div key={i} className="line flex_column">
+                  <div
+                    style={{ marginBottom: "6px" }}
+                    className="text_semiBold"
+                  >
+                    Шаг {i + 1}
+                  </div>
+
+                  <ul>
+                    {Object.values(obj).map((text, j) => (
+                      <li key={j}>{text}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
         </>
       )}
     </div>
   );
 }
 
+// ключ - количество пройденных
+// в профиле достижения
+// придумать что-то, чтобы много раз не приходилось к индексу прибавлять 1
+
 function Practice() {
   const { id } = useParams(),
+    // TODO: Переименовать переменную. Более конкретно
     lsKeyName = getLsKeyName(id as string),
     simulation = DATA[id]?.simulation,
     rightAnswers = simulation?.rightAnswers,
     fbRightChoices = simulation?.feedbackRightChoices,
     fbWrongChoices = simulation?.feedbackWrongChoices,
-    lsChoice =
-      localStorage.getItem(lsKeyName) === null
-        ? []
-        : JSON.parse(localStorage.getItem(lsKeyName) as string),
+    lsChoice = ls.get(lsKeyName) || [],
     [variantsIdxs, setVariantsIdxs] = useState(lsChoice),
     [activeAnalysis, setActiveAnalysis] = useState(false),
     outputNumberSteps = !lsChoice.length ? 1 : lsChoice.length + 1,
@@ -298,10 +396,34 @@ function Practice() {
 
       const newValue = [...lsChoice];
       newValue.push(varIdx);
-      localStorage.setItem(lsKeyName, JSON.stringify(newValue));
+      ls.set(lsKeyName, newValue);
       setVariantsIdxs([...variantsIdxs, varIdx]);
+
+      if (
+        stepIdx === simulation.steps.length - 1 &&
+        varIdx + 1 === rightAnswers[1]
+      ) {
+        const choicesCompleted = ls.get("choicesCompleted");
+
+        if (choicesCompleted === null) {
+          ls.set("choicesCompleted", [lsKeyName]);
+        } else {
+          const newValue = choicesCompleted;
+
+          if (!newValue.includes(lsKeyName)) {
+            newValue.push(lsKeyName);
+            ls.set("choicesCompleted", newValue);
+          }
+        }
+      }
     },
-    [outputNumberSteps, variantsIdxs],
+    [
+      lsKeyName,
+      outputNumberSteps,
+      rightAnswers,
+      simulation.steps.length,
+      variantsIdxs,
+    ],
   );
 
   if (!Object.keys(DATA).includes(id as string)) {
@@ -310,27 +432,13 @@ function Practice() {
 
   return (
     <Page className="Practice">
-      <div style={{ display: "flex", columnGap: "24px", marginBottom: "24px" }}>
-        <Button
-          onClick={() => {
-            localStorage.removeItem(lsKeyName);
-            setVariantsIdxs([]);
-          }}
-        >
-          Сбросить все
-        </Button>
-
-        <Link to="/">
-          <Button>Вернуться</Button>
-        </Link>
-      </div>
-
       <div style={{ width: WIDTH_CONTENT }}>
         <Briefing
           name={simulation.name}
           script={simulation.script}
           goal={simulation.goal}
-          numberSteps={simulation.steps.length}
+          lsKeyName={lsKeyName}
+          setVariantsIdxs={setVariantsIdxs}
         />
 
         <Steps

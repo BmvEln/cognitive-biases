@@ -1,0 +1,40 @@
+.Radio {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+  padding: 14px 12px;
+  border: 1px solid #0000004d;
+  border-radius: 8px;
+  background-color: #fff;
+
+  &Cicle {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    box-sizing: border-box;
+
+    > div {
+      transform: translate(2px, 2px);
+
+      transition: opacity 0.2s;
+
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #000;
+    }
+  }
+
+  &Text {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  &Group {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+  }
+}

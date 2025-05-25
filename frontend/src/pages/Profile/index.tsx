@@ -5,10 +5,9 @@ import { useAppDispatch } from "../../redux/store.tsx";
 import "./style.less";
 
 import { auth } from "../../firebase/firebase.ts";
-import { LINK_HISTORY } from "../../static/static.tsx";
-
 import { signOut } from "firebase/auth";
 import { setUser } from "../../redux/slices/userSlice.tsx";
+import { LINK_ACHIEVEMENTS, LINK_HOME } from "../../static/static.tsx";
 
 import Button from "../../components/controls/Button";
 import Page from "../../components/layout/Page";
@@ -71,6 +70,14 @@ function Profile() {
           )}
         </div>
 
+        <div className="ProfileSeparator" />
+
+        <div className="ProfileSubtitle">
+          <Link to={LINK_ACHIEVEMENTS}>
+            <Button>Достижения</Button>
+          </Link>
+        </div>
+
         {!auth?.currentUser ? null : (
           <>
             <div className="ProfileSeparator" />
@@ -87,9 +94,9 @@ function Profile() {
         )}
       </div>
 
-      <Link to={LINK_HISTORY}>
+      <Link to={LINK_HOME}>
         <Button style={{ position: "absolute", top: "24px", left: "60px" }}>
-          ← К настроениям
+          ← На главную
         </Button>
       </Link>
     </Page>

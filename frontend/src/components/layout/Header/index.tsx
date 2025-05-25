@@ -4,6 +4,7 @@ import { RootState, useAppSelector } from "../../../redux/store.tsx";
 import "./style.less";
 
 import {
+  LINK_ABOUT,
   LINK_HOME,
   LINK_PROFILE,
   LINK_SING_IN,
@@ -26,6 +27,7 @@ function Header() {
         <div className="HeaderLinks">
           <Theme />
           <Link to={LINK_HOME}>Главная</Link>
+          <Link to={LINK_ABOUT}>О нас</Link>
           {email ? (
             <Link to={LINK_PROFILE}>
               <div className="HeaderProfile">{email.slice(0, 1)}</div>

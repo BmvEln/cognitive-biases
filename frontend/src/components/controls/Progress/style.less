@@ -1,0 +1,21 @@
+.Progress {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  box-sizing: border-box;
+  //border: 1px solid #666769;
+  border-radius: 9px;
+  background-color: #e0e7ee;
+
+  &::after {
+    position: absolute;
+    content: "";
+    display: block;
+
+    width: var(--value);
+    height: 100%;
+    border-radius: 9px 10px 10px 9px;
+    background-color: var(--progressColor);
+  }
+}

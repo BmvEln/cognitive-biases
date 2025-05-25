@@ -1,16 +1,21 @@
+import React from "react";
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./style.less";
 
+import { IMG } from "../../static/img.ts";
 import { DATA } from "../fakeData.ts";
+import { COGNITIVE_BIAS_MAP } from "./cognitiveDistortionMap.ts";
+import { ls } from "../../functions/functions.tsx";
 
 import Page from "../../components/layout/Page";
 import Heading from "../../components/blocks/Heading";
 import Window from "../../components/layout/Window";
 import Button from "../../components/controls/Button";
-import React from "react";
-import { IMG } from "../../static/img.ts";
+import Progress from "../../components/controls/Progress";
+import ShowMore from "../../components/blocks/ShowMore";
+import Input from "../../components/controls/Input";
 
 const SUBTITLES = [
   "Название",
@@ -23,80 +28,142 @@ const SUBTITLES = [
 function Briefing() {
   return (
     <>
-      <div className="text_font-18 line semi-medium">
-        Что такое когнитивные искажения?
-      </div>
-      <div>
-        Когнитивные искажения — это ошибки мышления, которые искажают наше
-        восприятие реальности.
-      </div>
-      <div className="line upper-middle">
-        Проще говоря: «Это когда мозг обманывает сам себя» — чтобы сэкономить
-        силы, упростить информацию или подстроить её под наши убеждения.
-      </div>
-      <div className="text_font-18 line semi-medium">Зачем их знать?</div>
-      <ul style={{ marginBottom: "24px" }}>
-        <li>
-          Принимать лучшие решения — меньше ошибок в финансах, отношениях,
-          карьере.
-        </li>
-        <li>
-          Меньше стресса — не катастрофизировать из-за искажений вроде
-          «чёрно-белого мышления».
-        </li>
-        <li>
-          Лучше понимать других — осознавать, почему люди спорят, верят фейкам
-          или не меняют мнение.
-        </li>
-        <li>Прокачивать критическое мышление — отделять факты от иллюзий.</li>
-      </ul>
-      <div className="line upper-middle">
-        <span>
+      <ShowMore title="Что такое когнитивные искажения?">
+        <div>
+          Когнитивные искажения — это ошибки мышления, которые искажают наше
+          восприятие реальности.
+        </div>
+        <div className="line upper-middle">
+          Проще говоря: «Это когда мозг обманывает сам себя» — чтобы сэкономить
+          силы, упростить информацию или подстроить её под наши убеждения.
+        </div>
+      </ShowMore>
+
+      <ShowMore title="Зачем их знать?">
+        <ul style={{ marginBottom: "24px" }}>
+          <li>
+            Принимать лучшие решения — меньше ошибок в финансах, отношениях,
+            карьере.
+          </li>
+          <li>
+            Меньше стресса — не катастрофизировать из-за искажений вроде
+            «чёрно-белого мышления».
+          </li>
+          <li>
+            Лучше понимать других — осознавать, почему люди спорят, верят фейкам
+            или не меняют мнение.
+          </li>
+          <li>Прокачивать критическое мышление — отделять факты от иллюзий.</li>
+        </ul>
+
+        <div className="line upper-middle">
           <span>
-            Когнитивные искажения — как «баги» в программе мозга. Научившись их
-            замечать, ты становишься
+            <span>
+              Когнитивные искажения — как «баги» в программе мозга. Научившись
+              их замечать, ты становишься
+            </span>
+            <span className="text_semiBold"> рациональнее.</span> <br />
+            <span className="text_semiBold"> Более 382 пользователей</span>
+            <span> уже нашли свои когнитивные слепые пятна.</span>
           </span>
-          <span className="text_semiBold"> рациональнее.</span> <br />
-          <span className="text_semiBold"> Более 382 пользователей</span>
-          <span> уже нашли свои когнитивные слепые пятна.</span>
-        </span>
-      </div>
+        </div>
+      </ShowMore>
     </>
   );
 }
 
 type MapBiasesProps = {
-  setItemId: (id: string) => void;
+  setBiasId: (id: string) => void;
 };
 
-function MapBiases({ setItemId }: MapBiasesProps) {
+function MapBiases({ setBiasId }: MapBiasesProps) {
+  const lsChoicesCompleted = ls.get("choicesCompleted") || [];
+  const [search, setSearch] = useState("");
+
   return (
     <>
-      <div className="text_font-18 line semi-medium">
+      <div className="text_font-20 line text_semiBold semi-medium">
         Карта когнитивных искажений
       </div>
 
+      <div
+        className="line flex_align_center semi-medium"
+        style={{ columnGap: "12px" }}
+      >
+        <div>Прогресс прохождения:</div>
+
+        <Progress
+          width={200}
+          value={lsChoicesCompleted.length / Object.keys(DATA).length}
+        />
+      </div>
+
       <div className="HomeBiases">
-        <div
-          style={{
-            backgroundImage: `url(${IMG.brain})`,
-          }}
+        <Input
+          placeholder="Поиск по искажениям"
+          width={600}
+          value={search}
+          onChange={(v) => setSearch(v)}
         />
 
-        <ul>
-          {Object.entries(DATA).map(([key, { name }]) => (
-            <li key={name} onClick={() => setItemId(key)}>
-              {name}
-            </li>
-          ))}
-        </ul>
+        <img src={IMG.water} width={640} height={640} alt="" />
+        <img
+          style={{ transform: "scaleX(-1)" }}
+          src={IMG.water}
+          width={640}
+          height={640}
+          alt=""
+        />
+        {Object.entries(COGNITIVE_BIAS_MAP).map(
+          ([key, { name, width, height, top, left, biases }], i) => (
+            <div
+              style={{
+                backgroundImage: `url("${IMG[`continent_${i + 1}`]}")`,
+                width,
+                height,
+                top,
+                left,
+                backgroundSize: "cover",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: name.top,
+                  left: name.left,
+                  zIndex: 2,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {name.text}
+              </div>
+
+              {Object.entries(biases).map(([key, { top, left, img }]) => (
+                <div
+                  className="bias"
+                  title={DATA[key].name}
+                  onClick={() => setBiasId(key)}
+                  style={{
+                    top,
+                    left,
+                    backgroundColor: lsChoicesCompleted.includes(`choice${key}`)
+                      ? "green"
+                      : "red",
+                  }}
+                >
+                  {key}
+                </div>
+              ))}
+            </div>
+          ),
+        )}
       </div>
     </>
   );
 }
 
 function Home() {
-  const [itemId, setItemId] = useState<string | undefined>(undefined),
+  const [biasId, setBiasId] = useState<string | undefined>(undefined),
     item = {
       name: null,
       definition: null,
@@ -105,29 +172,29 @@ function Home() {
       fix: null,
     };
 
-  if (DATA[itemId]) {
-    item.name = DATA[itemId].name;
-    item.definition = DATA[itemId].definition;
-    item.realLifeExample = DATA[itemId].realLifeExample;
-    item.manifestation = DATA[itemId].manifestation;
-    item.fix = DATA[itemId].fix;
+  if (DATA[biasId]) {
+    item.name = DATA[biasId].name;
+    item.definition = DATA[biasId].definition;
+    item.realLifeExample = DATA[biasId].realLifeExample;
+    item.manifestation = DATA[biasId].manifestation;
+    item.fix = DATA[biasId].fix;
   }
 
   const handleClickClose = useCallback(() => {
-    setItemId(undefined);
+    setBiasId(undefined);
   }, []);
 
   return (
     <Page className="Home">
-      <Heading>Когнитивные искажения</Heading>
+      <Heading one>Когнитивные искажения</Heading>
       <Briefing />
-      <MapBiases setItemId={setItemId} />
+      <MapBiases setBiasId={setBiasId} />
 
       <Window
-        open={typeof itemId === "string"}
+        open={typeof biasId === "string"}
         onClose={() => handleClickClose()}
       >
-        {!itemId
+        {!biasId
           ? null
           : Object.values(item).map((v, i) => {
               return (
@@ -146,7 +213,7 @@ function Home() {
               );
             })}
 
-        <Link to={`/task/${itemId}`}>
+        <Link to={`/bias/${biasId}`}>
           <Button>Тренироваться</Button>
         </Link>
       </Window>

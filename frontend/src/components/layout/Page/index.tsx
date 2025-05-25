@@ -12,8 +12,8 @@ type PageProps = {
 
 function Page({ children, className }: PageProps) {
   return (
-    <div className={classnames("Page", className)}>
-      <div className="PageContent">{children}</div>
+    <div className="Page">
+      <div className={classnames("PageContent", className)}>{children}</div>
 
       <Footer />
     </div>

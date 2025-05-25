@@ -16,23 +16,34 @@
   }
 
   &Biases {
-    display: flex;
-    column-gap: 24px;
+    position: relative;
+    width: 100%;
+    height: 640px;
 
-    > div:first-child {
-      width: 200px;
-      height: 200px;
-      background-size: cover;
+    > div {
+      position: absolute;
     }
 
-    > ul > li {
-      opacity: 0.8;
-      cursor: pointer;
-      transition: opacity 0.2s;
+    & .bias {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-      &:hover {
-        opacity: 1;
-      }
+      font-size: 8px;
+      line-height: 8px;
+
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    > .Input {
+      position: absolute;
+      top: 20px;
+      left: calc(50% - 300px);
+      z-index: 10;
     }
   }
 }

@@ -7,6 +7,9 @@ import "./style.less";
 import "../../../firebase/firebase.ts";
 
 import {
+  LINK_ABOUT,
+  LINK_ACHIEVEMENTS,
+  LINK_BIAS,
   LINK_PROFILE,
   LINK_SING_IN,
   LINK_SING_UP,
@@ -15,6 +18,7 @@ import {
 import { auth } from "../../../firebase/firebase.ts";
 
 import { setUser } from "../../../redux/slices/userSlice.tsx";
+import { useAchievements } from "../../../functions/hooks.tsx";
 
 import MainLayout from "../MainLayout";
 import Home from "../../../pages/Home";
@@ -22,9 +26,14 @@ import NoteFound from "../../../pages/NoteFound";
 import Login from "../../../pages/Login";
 import Profile from "../../../pages/Profile";
 import Practice from "../../../pages/Practice";
+import Achievements from "../../../pages/Achievements";
+import About from "../../../pages/About";
 
 function App() {
   const dispatch = useAppDispatch();
+
+  useAchievements();
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -78,8 +87,10 @@ function App() {
           <Route path={LINK_SING_IN} element={<Login method="singIn" />} />
           <Route path={LINK_SING_UP} element={<Login method="singUp" />} />
 
-          <Route path={LINK_TASK} element={<Practice />} />
+          <Route path={LINK_BIAS} element={<Practice />} />
+          <Route path={LINK_ACHIEVEMENTS} element={<Achievements />} />
 
+          <Route path={LINK_ABOUT} element={<About />} />
           <Route path="*" element={<NoteFound />} />
         </Route>
       </Routes>

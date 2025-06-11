@@ -12,6 +12,14 @@ import Page from "../../components/layout/Page";
 import Button from "../../components/controls/Button";
 import { Radio } from "../../components/controls/Radio";
 
+const IMAGE_SIZES = {
+  1: { w: 384, h: 256 },
+  2: { w: 256, h: 384 },
+  3: { w: 256, h: 384 },
+  4: { w: 256, h: 384 },
+  5: { w: 256, h: 256 },
+};
+
 function getLsKeyName(id: string) {
   return `choice${id}`;
 }
@@ -217,7 +225,7 @@ function Briefing({
       <div className="PracticeTop">
         <div>
           <div>Симуляция:</div>
-          <div>&nbsp;{name}</div>
+          <div>{name}</div>
         </div>
 
         <div>
@@ -255,19 +263,21 @@ function Briefing({
         <div>{script}</div>
       </div>
 
-      {id !== "1" ? null : (
+      {!IMG[`bias${id}`] ? null : (
         <div
           style={{
             display: "flex",
+            width: "100%",
             justifyContent: "center",
             marginBottom: "50px",
           }}
         >
           <div
             style={{
-              width: "768px",
-              height: "512px",
-              backgroundImage: `url(${IMG.bias1})`,
+              borderRadius: "12px",
+              width: IMAGE_SIZES[id].w + "px",
+              height: IMAGE_SIZES[id].h + "px",
+              backgroundImage: `url(${IMG[`bias${id}`]})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
             }}
@@ -442,28 +452,26 @@ function Practice() {
 
   return (
     <Page className="Practice">
-      <div>
-        <Briefing
-          id={id}
-          name={simulation.name}
-          script={simulation.script}
-          goal={simulation.goal}
-          lsKeyName={lsKeyName}
-          setVariantsIdxs={setVariantsIdxs}
-        />
+      <Briefing
+        id={id}
+        name={simulation.name}
+        script={simulation.script}
+        goal={simulation.goal}
+        lsKeyName={lsKeyName}
+        setVariantsIdxs={setVariantsIdxs}
+      />
 
-        <Steps
-          id={id}
-          steps={simulation.steps}
-          outputNumberSteps={outputNumberSteps}
-          variantsIdxs={variantsIdxs}
-          setVariantsIdxs={setVariantsIdxs}
-          handleClickChoice={handleClickChoice}
-          rightAnswers={rightAnswers}
-          fbWrongChoices={simulation?.feedbackWrongChoices}
-          lsChoice={lsChoice}
-        />
-      </div>
+      <Steps
+        id={id}
+        steps={simulation.steps}
+        outputNumberSteps={outputNumberSteps}
+        variantsIdxs={variantsIdxs}
+        setVariantsIdxs={setVariantsIdxs}
+        handleClickChoice={handleClickChoice}
+        rightAnswers={rightAnswers}
+        fbWrongChoices={simulation?.feedbackWrongChoices}
+        lsChoice={lsChoice}
+      />
 
       {!isDone ? null : (
         <Result

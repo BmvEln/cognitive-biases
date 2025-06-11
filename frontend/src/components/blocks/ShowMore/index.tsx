@@ -40,6 +40,7 @@ function ShowMore({ title, children }: ShowMore) {
           opacity: isOpen ? 1 : 0,
           marginBottom: (isOpen ? 24 : 0) + "px",
           transition: isOpen ? "opacity 0.5s" : undefined,
+          pointerEvents: isOpen ? "auto" : "none",
         }}
       >
         {children}

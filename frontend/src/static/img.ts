@@ -12,6 +12,10 @@ import avatar1 from "./webp/avatar1.webp";
 import avatar2 from "./webp/avatar2.webp";
 import avatar3 from "./webp/avatar3.webp";
 import bias1 from "./webp/bias1.webp";
+import bias2 from "./webp/bias2.webp";
+import bias3 from "./webp/bias3.webp";
+import bias4 from "./webp/bias4.webp";
+import bias5 from "./webp/bias5.webp";
 
 export const IMG = {
   seeMore,
@@ -28,4 +32,8 @@ export const IMG = {
   avatar2,
   avatar3,
   bias1,
+  bias2,
+  bias3,
+  bias4,
+  bias5,
 };

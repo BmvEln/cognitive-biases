@@ -79,6 +79,7 @@ type MapBiasesProps = {
 function MapBiases({ setBiasId }: MapBiasesProps) {
   const lsChoicesCompleted = ls.get("choicesCompleted") || [];
   const [search, setSearch] = useState("");
+  const [tabIdx, setTabIdx] = useState(0);
 
   return (
     <>
@@ -98,66 +99,86 @@ function MapBiases({ setBiasId }: MapBiasesProps) {
         />
       </div>
 
-      <div className="HomeBiases">
-        <Input
-          placeholder="Поиск по искажениям"
-          width={600}
-          value={search}
-          onChange={(v) => setSearch(v)}
-        />
+      <div className="HomeTabs">
+        {["Карта", "Список"].map((str, i) => (
+          <div
+            onClick={() => setTabIdx(i)}
+            className={`${i === tabIdx ? "selected" : ""}`}
+          >
+            {str}
+          </div>
+        ))}
+      </div>
 
-        <img src={IMG.water} width={640} height={640} alt="" />
-        <img
-          style={{ transform: "scaleX(-1)" }}
-          src={IMG.water}
-          width={640}
-          height={640}
-          alt=""
-        />
-        {Object.entries(COGNITIVE_BIAS_MAP).map(
-          ([key, { name, width, height, top, left, biases }], i) => (
-            <div
-              style={{
-                backgroundImage: `url("${IMG[`continent_${i + 1}`]}")`,
-                width,
-                height,
-                top,
-                left,
-                backgroundSize: "cover",
-              }}
-            >
+      {tabIdx !== 0 ? null : (
+        <div className="HomeGraphics">
+          <img src={IMG.water} width={640} height={640} alt="" />
+          <img
+            style={{ transform: "scaleX(-1)" }}
+            src={IMG.water}
+            width={640}
+            height={640}
+            alt=""
+          />
+          {Object.entries(COGNITIVE_BIAS_MAP).map(
+            ([key, { name, width, height, top, left, biases }], i) => (
               <div
                 style={{
-                  position: "absolute",
-                  top: name.top,
-                  left: name.left,
-                  zIndex: 2,
-                  whiteSpace: "nowrap",
+                  backgroundImage: `url("${IMG[`continent_${i + 1}`]}")`,
+                  width,
+                  height,
+                  top,
+                  left,
+                  backgroundSize: "cover",
                 }}
               >
-                {name.text}
-              </div>
-
-              {Object.entries(biases).map(([key, { top, left, img }]) => (
                 <div
-                  className="bias"
-                  title={DATA[key].name}
-                  onClick={() => setBiasId(key)}
                   style={{
-                    top,
-                    left,
-                    backgroundColor: lsChoicesCompleted.includes(`choice${key}`)
-                      ? "green"
-                      : "red",
+                    position: "absolute",
+                    top: name.top,
+                    left: name.left,
+                    zIndex: 2,
+                    whiteSpace: "nowrap",
                   }}
                 >
-                  {key}
+                  {name.text}
                 </div>
-              ))}
-            </div>
-          ),
-        )}
-      </div>
+
+                {Object.entries(biases).map(([key, { top, left, img }]) => (
+                  <div
+                    className="bias"
+                    title={DATA[key].name}
+                    onClick={() => setBiasId(key)}
+                    style={{
+                      top,
+                      left,
+                      backgroundColor: lsChoicesCompleted.includes(
+                        `choice${key}`,
+                      )
+                        ? "green"
+                        : "red",
+                    }}
+                  >
+                    {key}
+                  </div>
+                ))}
+              </div>
+            ),
+          )}
+        </div>
+      )}
+
+      {tabIdx !== 1 ? null : (
+        <>
+          <Input
+            placeholder="Поиск по искажениям"
+            width={600}
+            value={search}
+            onChange={(v) => setSearch(v)}
+          />
+          <div className="HomeListBiases">{}</div>
+        </>
+      )}
     </>
   );
 }

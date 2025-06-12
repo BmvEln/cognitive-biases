@@ -21,12 +21,8 @@ export const ACHIEVEMENTS = {
     id: 3,
     name: "Мастер когнитивных искажений",
     desc: "Пройти все искажения",
-    condition: (userData) =>
-      userData.choicesCompleted?.length === Object.keys(DATA).length,
+    condition: (userData) => userData.choicesCompleted?.length === DATA.length,
     progress: (userData) =>
-      Math.min(
-        (userData.choicesCompleted?.length / Object.keys(DATA).length) * 100,
-        100,
-      ),
+      Math.min((userData.choicesCompleted?.length / DATA.length) * 100, 100),
   },
 };

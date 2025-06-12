@@ -16,14 +16,15 @@ import Button from "../../components/controls/Button";
 import Progress from "../../components/controls/Progress";
 import ShowMore from "../../components/blocks/ShowMore";
 import Input from "../../components/controls/Input";
+import { biasPT } from "../../static/types.tsx";
 
-const SUBTITLES = [
-  "Название",
-  "Простое определение",
-  "Пример из жизни",
-  "Как проявляется в мышлении?",
-  "Как исправить?",
-];
+const WINDOW_CONTENT = [
+  { title: "Название", key: "name" },
+  { title: "Простое определение", key: "definition" },
+  { title: "Пример из жизни", key: "realLifeExample" },
+  { title: "Как проявляется в мышлении?", key: "manifestation" },
+  { title: "Как исправить?", key: "fix" },
+] as const;
 
 function Briefing() {
   return (
@@ -77,9 +78,12 @@ type MapBiasesProps = {
 };
 
 function MapBiases({ setBiasId }: MapBiasesProps) {
-  const lsChoicesCompleted = ls.get("choicesCompleted") || [];
-  const [search, setSearch] = useState("");
-  const [tabIdx, setTabIdx] = useState(0);
+  const lsChoicesCompleted = ls.get("choicesCompleted") || [],
+    [search, setSearch] = useState(""),
+    [tabIdx, setTabIdx] = useState(0),
+    listBiases = DATA.filter(({ name }) =>
+      name.toLowerCase().includes(search.toLowerCase()),
+    );
 
   return (
     <>
@@ -93,15 +97,13 @@ function MapBiases({ setBiasId }: MapBiasesProps) {
       >
         <div>Прогресс прохождения:</div>
 
-        <Progress
-          width={200}
-          value={lsChoicesCompleted.length / Object.keys(DATA).length}
-        />
+        <Progress width={200} value={lsChoicesCompleted.length / DATA.length} />
       </div>
 
       <div className="HomeTabs">
         {["Карта", "Список"].map((str, i) => (
           <div
+            key={i}
             onClick={() => setTabIdx(i)}
             className={`${i === tabIdx ? "selected" : ""}`}
           >
@@ -120,9 +122,11 @@ function MapBiases({ setBiasId }: MapBiasesProps) {
             height={640}
             alt=""
           />
+          {/*<editor-fold desc="COGNITIVE_BIAS_MAP">*/}
           {Object.entries(COGNITIVE_BIAS_MAP).map(
             ([key, { name, width, height, top, left, biases }], i) => (
               <div
+                key={i}
                 style={{
                   backgroundImage: `url("${IMG[`continent_${i + 1}`]}")`,
                   width,
@@ -144,10 +148,12 @@ function MapBiases({ setBiasId }: MapBiasesProps) {
                   {name.text}
                 </div>
 
-                {Object.entries(biases).map(([key, { top, left, img }]) => (
+                {Object.entries(biases).map(([key, { top, left, img }], j) => (
                   <div
+                    key={j}
                     className="bias"
-                    title={DATA[key].name}
+                    // ???
+                    // title={DATA[i].name}
                     onClick={() => setBiasId(key)}
                     style={{
                       top,
@@ -165,6 +171,7 @@ function MapBiases({ setBiasId }: MapBiasesProps) {
               </div>
             ),
           )}
+          {/*</editor-fold>*/}
         </div>
       )}
 
@@ -176,7 +183,21 @@ function MapBiases({ setBiasId }: MapBiasesProps) {
             value={search}
             onChange={(v) => setSearch(v)}
           />
-          <div className="HomeListBiases">{}</div>
+          <div className="HomeListBiases">
+            {listBiases.map(({ name, id }) => (
+              <div
+                key={id}
+                onClick={() => setBiasId(id.toString())}
+                style={{
+                  color: lsChoicesCompleted.includes(`choice${id}`)
+                    ? "green"
+                    : "red",
+                }}
+              >
+                {name}
+              </div>
+            ))}
+          </div>
         </>
       )}
     </>
@@ -185,7 +206,7 @@ function MapBiases({ setBiasId }: MapBiasesProps) {
 
 function Home() {
   const [biasId, setBiasId] = useState<string | undefined>(undefined),
-    biasItem = typeof biasId === "string" ? DATA[biasId] : undefined,
+    biasItem: biasPT = DATA.find((item) => biasId == item.id),
     handleClickClose = useCallback(() => {
       setBiasId(undefined);
     }, []);
@@ -202,22 +223,18 @@ function Home() {
       >
         {!biasId
           ? null
-          : Object.values(biasItem).map((v, i) => {
-              if (typeof v === "object" && !Array.isArray(v) && v !== null) {
-                return;
-              }
-
+          : WINDOW_CONTENT.map(({ title, key }, i) => {
               return (
                 <React.Fragment key={i}>
-                  <div className="HomeSubtitle">{SUBTITLES[i]}</div>
-                  {Array.isArray(v) ? (
+                  <div className="HomeSubtitle">{title}</div>
+                  {Array.isArray(biasItem[key]) ? (
                     <ul className="HomeContent">
-                      {(v as string[]).map((v: string) => (
+                      {(biasItem[key] as string[]).map((v: string) => (
                         <li key={v}>{v}</li>
                       ))}
                     </ul>
                   ) : (
-                    <div className="HomeContent">{v}</div>
+                    <div className="HomeContent">{biasItem[key]}</div>
                   )}
                 </React.Fragment>
               );

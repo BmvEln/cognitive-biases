@@ -398,7 +398,8 @@ function Practice() {
   const { id } = useParams(),
     // TODO: Переименовать переменную. Более конкретно
     lsKeyName = getLsKeyName(id as string),
-    simulation = DATA[id]?.simulation,
+    biasItem = DATA.find((item) => id == item.id),
+    simulation = biasItem?.simulation,
     rightAnswers = simulation?.rightAnswers,
     lsChoice = ls.get(lsKeyName) || [],
     [variantsIdxs, setVariantsIdxs] = useState(lsChoice),
@@ -420,7 +421,7 @@ function Practice() {
       setVariantsIdxs([...variantsIdxs, varIdx]);
 
       if (
-        stepIdx === simulation.steps.length - 1 &&
+        stepIdx === simulation?.steps?.length - 1 &&
         varIdx + 1 === rightAnswers[1]
       ) {
         const choicesCompleted = ls.get("choicesCompleted");
@@ -441,12 +442,12 @@ function Practice() {
       lsKeyName,
       outputNumberSteps,
       rightAnswers,
-      simulation.steps.length,
+      simulation?.steps?.length,
       variantsIdxs,
     ],
   );
 
-  if (!Object.keys(DATA).includes(id as string)) {
+  if (!DATA.find((item) => id == item.id)) {
     return <Navigate to="/" />;
   }
 

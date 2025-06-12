@@ -6,6 +6,7 @@ export const COGNITIVE_BIAS_MAP = {
     top: 0,
     left: 0,
     biases: {
+      // Возможно тоже переделать под массив
       1: {
         top: 80,
         left: 140,

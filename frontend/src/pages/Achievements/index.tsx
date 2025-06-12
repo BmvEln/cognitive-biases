@@ -53,7 +53,7 @@ function AchievementsItems({ isAchieved }: { isAchieved?: boolean }) {
             );
           },
         ),
-      [],
+      [isAchieved, userData],
     );
 
   return isAchieved && !hasLeastOneItem ? (

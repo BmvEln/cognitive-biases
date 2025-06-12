@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
-import { RootState, useAppSelector } from "../../../redux/store.tsx";
+import {
+  RootState,
+  useAppDispatch,
+  useAppSelector,
+} from "../../../redux/store.tsx";
 
 import "./style.less";
 
+import { setAchievementNotice } from "../../../redux/slices/achievementNoticeSlice.tsx";
+
 import {
   LINK_ABOUT,
+  LINK_ACHIEVEMENTS,
   LINK_HOME,
   LINK_PROFILE,
   LINK_SING_IN,
@@ -13,7 +20,11 @@ import {
 } from "../../../static/static.tsx";
 
 function Header() {
+  const dispatch = useAppDispatch();
   const { email } = useAppSelector((state: RootState) => state.user);
+  const { showNotice } = useAppSelector(
+    (state: RootState) => state.achievementNotice,
+  );
 
   return (
     <div className="Header">
@@ -24,6 +35,13 @@ function Header() {
 
         <div className="HeaderLinks">
           <Link to={LINK_HOME}>Главная</Link>
+          <Link
+            className={showNotice ? "notification" : ""}
+            onClick={() => dispatch(setAchievementNotice(false))}
+            to={LINK_ACHIEVEMENTS}
+          >
+            Достижения
+          </Link>
           <Link to={LINK_ABOUT}>О нас</Link>
           {email ? (
             <Link to={LINK_PROFILE}>

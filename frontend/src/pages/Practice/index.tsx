@@ -11,6 +11,10 @@ import { IMG } from "../../static/img.ts";
 import Page from "../../components/layout/Page";
 import Button from "../../components/controls/Button";
 import { Radio } from "../../components/controls/Radio";
+import { ACHIEVEMENTS } from "../../static/achievements.ts";
+import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../redux/store.tsx";
+import { setAchievementNotice } from "../../redux/slices/achievementNoticeSlice.tsx";
 
 const IMAGE_SIZES = {
   1: { w: 384, h: 256 },
@@ -173,6 +177,7 @@ function Step({
         >
           {variants.map((variant: string, j: number) => (
             <Radio
+              key={j}
               onClick={() => setVariantsIdx(j)}
               selected={j === variantsIdx}
               disabled={typeof variantsIdxs[i] === "number"}
@@ -396,6 +401,7 @@ function Result({
 
 function Practice() {
   const { id } = useParams(),
+    dispatch = useAppDispatch(),
     // TODO: Переименовать переменную. Более конкретно
     lsKeyName = getLsKeyName(id as string),
     biasItem = DATA.find((item) => id == item.id),
@@ -408,6 +414,20 @@ function Practice() {
     isDone = rightAnswers?.every(
       (a: number, i: number) => a === variantsIdxs[i] + 1,
     );
+
+  const checkAchievements = () => {
+    const userData = { choicesCompleted: ls.get("choicesCompleted") };
+    const numberAchievs = Object.values(ACHIEVEMENTS).filter(({ condition }) =>
+      condition(userData),
+    ).length;
+    const savedNumber = Number(ls.get("numberAchievs") || "0");
+
+    if (numberAchievs > savedNumber) {
+      ls.set("hasNewAchiev", true);
+      ls.set("numberAchievs", numberAchievs);
+      dispatch(setAchievementNotice(true));
+    }
+  };
 
   const handleClickChoice = useCallback(
     (stepIdx: number, varIdx: number) => {
@@ -430,15 +450,17 @@ function Practice() {
           ls.set("choicesCompleted", [lsKeyName]);
         } else {
           const newValue = choicesCompleted;
-
           if (!newValue.includes(lsKeyName)) {
             newValue.push(lsKeyName);
             ls.set("choicesCompleted", newValue);
           }
         }
+
+        checkAchievements();
       }
     },
     [
+      lsChoice,
       lsKeyName,
       outputNumberSteps,
       rightAnswers,

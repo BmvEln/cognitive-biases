@@ -58,6 +58,11 @@ export const COGNITIVE_BIAS_MAP = {
         left: 160,
         img: "",
       },
+      6: {
+        top: 100,
+        left: 160,
+        img: "",
+      },
     },
   },
 };

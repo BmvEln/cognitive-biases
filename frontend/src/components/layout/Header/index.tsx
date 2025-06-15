@@ -8,6 +8,7 @@ import {
 import "./style.less";
 
 import { setAchievementNotice } from "../../../redux/slices/achievementNoticeSlice.tsx";
+import { ls } from "../../../functions/functions.tsx";
 
 import {
   LINK_ABOUT,
@@ -37,7 +38,10 @@ function Header() {
           <Link to={LINK_HOME}>Главная</Link>
           <Link
             className={showNotice ? "notification" : ""}
-            onClick={() => dispatch(setAchievementNotice(false))}
+            onClick={() => {
+              dispatch(setAchievementNotice(false));
+              ls.set("hasNewAchiev", false);
+            }}
             to={LINK_ACHIEVEMENTS}
           >
             Достижения

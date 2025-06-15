@@ -143,7 +143,7 @@ function Step({
         })}
       >
         <span>
-          <span className="text_medium">Шаг {i + 1}:</span>
+          <span className="text_medium">👣 Шаг {i + 1}:</span>
           <span>&nbsp;{name}</span>
         </span>
       </div>
@@ -264,7 +264,7 @@ function Briefing({
       </div>
 
       <div className="line upper-middle flex_column">
-        <div className="PracticeSubTitle">Сценарий:</div>
+        <div className="PracticeSubTitle">🎬 Сценарий:</div>
         <div>{script}</div>
       </div>
 
@@ -291,7 +291,7 @@ function Briefing({
       )}
 
       <div className="line upper-middle flex_column">
-        <div className="PracticeSubTitle">Цель:</div>
+        <div className="PracticeSubTitle">🎯 Цель:</div>
         <div>{goal}</div>
       </div>
     </>
@@ -317,11 +317,11 @@ function Result({
 }: ResultProps) {
   return (
     <div>
-      <div style={{ margin: "30px 0 24px" }}>{positiveResult}</div>
+      <div style={{ margin: "30px 0 24px" }}>💪 {positiveResult}</div>
 
       <div className="PracticeFeedback PracticeFeedback_positive">
         <div style={{ color: "green" }}>Ты принял правильные решения!</div>
-        <div>{conclusion}</div>
+        <div>🧩 {conclusion}</div>
       </div>
 
       <Button onClick={() => setActiveAnalysis(!activeAnalysis)}>
@@ -341,7 +341,7 @@ function Result({
             style={{ margin: "24px 0 16px" }}
             className="text_font-20 text_semiBold"
           >
-            Разбор:
+            🧠 Разбор:
           </div>
 
           <div
@@ -349,7 +349,7 @@ function Result({
           />
 
           <div className="PracticeRationalChoices">
-            <div>Рациональные выборы:</div>
+            <div>✅ Рациональные выборы:</div>
 
             <div>
               {Object.values(fbRightChoices).map((text, i) => (
@@ -374,7 +374,7 @@ function Result({
           </div>
 
           <div className="PracticeMistakeChoices">
-            <div>Ловушки и их последствия:</div>
+            <div>❌ Ловушки и их последствия:</div>
 
             <div>
               {Object.values(fbWrongChoices).map((obj, i) => (
@@ -415,19 +415,18 @@ function Practice() {
       (a: number, i: number) => a === variantsIdxs[i] + 1,
     );
 
-  const checkAchievements = () => {
-    const userData = { choicesCompleted: ls.get("choicesCompleted") };
-    const numberAchievs = Object.values(ACHIEVEMENTS).filter(({ condition }) =>
-      condition(userData),
-    ).length;
-    const savedNumber = Number(ls.get("numberAchievs") || "0");
+  const checkAchievements = useCallback(() => {
+    const userData = { choicesCompleted: ls.get("choicesCompleted") },
+      numberAchievs = Object.values(ACHIEVEMENTS).filter(({ condition }) =>
+        condition(userData),
+      ).length;
 
-    if (numberAchievs > savedNumber) {
+    if (numberAchievs > Number(ls.get("numberAchievs") || "0")) {
       ls.set("hasNewAchiev", true);
       ls.set("numberAchievs", numberAchievs);
       dispatch(setAchievementNotice(true));
     }
-  };
+  }, [dispatch]);
 
   const handleClickChoice = useCallback(
     (stepIdx: number, varIdx: number) => {
